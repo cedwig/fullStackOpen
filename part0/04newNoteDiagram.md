@@ -1,8 +1,8 @@
 ```mermaid
 sequenceDiagram
+    participant user
     participant browser
     participant server
-    participant user
 
     user->>browser: inserts a value into the text input and presses the save button
     browser->>server: submit user input using an HTTP POST request to new_note

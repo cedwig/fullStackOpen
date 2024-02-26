@@ -1,8 +1,8 @@
 ```mermaid
 sequenceDiagram
+    participant user
     participant browser
     participant server
-    participant user
 
     user->>browser: inserts string into text input then presses save
     note right of browser: triggers js event listener function which updates page with new content using the user input and submits a post request to new_note_spa
