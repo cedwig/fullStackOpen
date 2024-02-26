@@ -13,6 +13,7 @@ sequenceDiagram
     activate server
     server-->>browser: HTML document
     deactivate server
+    note right of browser: reloads the page
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
     activate server
     server-->>browser: CSS file
