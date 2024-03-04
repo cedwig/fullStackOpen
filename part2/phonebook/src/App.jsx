@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SearchFilter from './components/SearchFilter'
 import AddEntryForm from './components/AddEntryForm'
 import Numbers from './components/Numbers'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -9,26 +10,55 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilterName, setNewFilterName] = useState('')
 
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(person => {
+        setPersons(person)
+      })
+  }, [])
+
   const addPerson = (event) => {
     event.preventDefault()
     if (newName === '') return
+    
     if (checkAlreadyExisting()) {
-      alert(`${newName} is already added to phonebook.`)
-      setNewName('')
-      return
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        const existingPerson = persons.find(p => p.name === newName)
+        const changedNumber = { ...existingPerson, number: newNumber }
+        personService
+          .update(existingPerson.id, changedNumber)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+          })
+      }
+    } else {
+      const newPerson = {
+        name: newName,
+        number: newNumber
+      }
+  
+      personService
+        .create(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+        })
     }
-    const newPerson = {
-      id: persons.length + 1,
-      name: newName,
-      number: newNumber
-    }
-    setPersons(persons.concat(newPerson))
+
     setNewName('')
     setNewNumber('')
   }
 
   const checkAlreadyExisting = () => {
     return persons.some(person => person.name === newName)
+  }
+
+  const deleteBookEntryOf = (currentPerson) => {
+    if (window.confirm(`Delete ${currentPerson.name} ?`)) {
+      personService
+        .deleteEntry(currentPerson.id)
+        .then(setPersons(persons.filter(person => person.id !== currentPerson.id)))
+    }
   }
 
   const personsToShow = newFilterName === ''
@@ -48,7 +78,9 @@ const App = () => {
                     newNumber={newNumber}
                     handleInputNameChange={handleInputNameChange} handleInputNumberChange={handleInputNumberChange}
                     addPerson={addPerson} />
-      <Numbers personsToShow={personsToShow} />
+      <Numbers personsToShow={personsToShow}
+              deleteBookEntry={deleteBookEntryOf}
+      />
 
     </div>
   )

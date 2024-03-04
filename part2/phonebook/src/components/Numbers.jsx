@@ -7,7 +7,11 @@ const Numbers = (props) => {
             <ul>
                 {
                 props.personsToShow.map(person => 
-                    <Number key={person.id} name={person.name} number={person.number} />
+                    <Number key={person.id}
+                            name={person.name}
+                            number={person.number}
+                            deleteBookEntry={() => props.deleteBookEntry(person)}
+                    />
                 )
                 }
             </ul>
