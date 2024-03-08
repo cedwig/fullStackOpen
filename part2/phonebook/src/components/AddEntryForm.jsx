@@ -1,12 +1,12 @@
 const AddEntryForm = (props) => {
     return (
-        <div>
+        <div className="entryFormContainer">
             <h2>add a new</h2>
-            <form onSubmit={props.addPerson}>
-                <div>
+            <form className="form" onSubmit={props.addPerson}>
+                <div className="formInput">
                 name: <input value={props.newName} onChange={props.handleInputNameChange} />
                 </div>
-                <div>
+                <div className="formInput">
                 number: <input value={props.newNumber} onChange={props.handleInputNumberChange} />
                 </div>
                 <div>

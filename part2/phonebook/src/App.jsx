@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react'
+import './styles.css'
 import SearchFilter from './components/SearchFilter'
 import AddEntryForm from './components/AddEntryForm'
 import Numbers from './components/Numbers'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilterName, setNewFilterName] = useState('')
+  const [notifMessage, setNotifMessage] = useState(null)
+  const [notifStyle, setNotifStyle] = useState('notification')
 
   useEffect(() => {
     personService
@@ -31,6 +35,18 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
           })
+          .catch( error => {
+            setNotifMessage(`Information of ${newName} has already been removed from the server`)
+            setNotifStyle('notification error')
+            setTimeout(() => {
+              setNotifMessage(null)
+              setNotifStyle('notification')
+            }, 5000);
+          })
+        setNotifMessage(`Updated ${newName}'s number to: ${newNumber}`)
+        setTimeout(() => {
+          setNotifMessage(null)
+        }, 5000);
       }
     } else {
       const newPerson = {
@@ -43,6 +59,17 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
         })
+        .catch(error => {
+          setNotifMessage(`Information of ${newName} has already been removed from the server`)
+          setTimeout(() => {
+            setNotifMessage(null)
+          }, 5000);
+        })
+      
+      setNotifMessage(`Added ${newName}`)
+      setTimeout(() => {
+        setNotifMessage(null)
+      }, 5000);
     }
 
     setNewName('')
@@ -70,8 +97,9 @@ const App = () => {
   const handleInputFilterChange = (event) => setNewFilterName(event.target.value)
 
   return (
-    <div>
+    <div className='phonebook'>
       <h2>Phonebook</h2>
+      <Notification message={notifMessage} style={notifStyle} />
       <SearchFilter newFilterName={newFilterName}
                     handleInputFilterChange={handleInputFilterChange} />
       <AddEntryForm newName={newName}
