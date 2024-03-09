@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8rem;
+    padding-left: 5rem;
+    height: 100dvh;
+}
+
+li {
+    list-style: none;
+}
+
+ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+img {
+    align-self: flex-start;
+    height: 5rem;
+    width: auto;
+}
+
+.countryinfos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
