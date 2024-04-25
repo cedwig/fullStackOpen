@@ -111,3 +111,38 @@ describe('favouriteBlog', () => {
     assert.deepStrictEqual(result, undefined)
   })
 })
+
+describe('mostBlogs', () => {
+
+  test('when list has only one blog, return its author', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    assert.deepStrictEqual(result, { authorWithMostBlogs: 'Edsger W. Dijkstra', totalBlogs: 1 })
+  })
+
+  test('when list has multiple blogs, return author with most blogs', () => {
+    const result = listHelper.mostBlogs(listWithMultipleBlogs)
+    assert.deepStrictEqual(result, { authorWithMostBlogs: 'Robert C. Martin', totalBlogs: 3 })
+  })
+
+  test('when list is empty return undefined author and 0 totalblogs', () => {
+    const result = listHelper.mostBlogs(listWithNoBlog)
+    assert.deepStrictEqual(result, { authorWithMostBlogs: undefined, totalBlogs: 0 })
+  })
+})
+
+describe('mostLikes', () => {
+  test('when list has only one blog, return its author and likes', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    assert.deepStrictEqual(result, { authorWithMostLikes: 'Edsger W. Dijkstra', totalLikes: 5 })
+  })
+
+  test('when list has multiple blogs, return author with most likes', () => {
+    const result = listHelper.mostLikes(listWithMultipleBlogs)
+    assert.deepStrictEqual(result, { authorWithMostLikes: 'Edsger W. Dijkstra', totalLikes: 12 })
+  })
+
+  test('when list is empty retun undefined author and 0 totalLikes', () => {
+    const result = listHelper.mostLikes(listWithNoBlog)
+    assert.deepStrictEqual(result, { authorWithMostLikes: undefined, totalLikes: 0 })
+  })
+})
